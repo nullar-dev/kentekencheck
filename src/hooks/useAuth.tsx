@@ -18,6 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(() => true);
   const supabaseRef = useRef<SupabaseClient | null>(null);
   const initialized = useRef(false);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -27,24 +28,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
-      // Defer setState to avoid lint error about sync setState in effect
-      setTimeout(() => setLoading(false), 0);
-      return;
+      const timer = window.setTimeout(() => {
+        if (mountedRef.current) setLoading(false);
+      }, 0);
+      return () => {
+        clearTimeout(timer);
+      };
     }
 
     const client = createClient(supabaseUrl, supabaseAnonKey);
     supabaseRef.current = client;
 
-    client.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    client.auth.getSession().then(({ data: { session }, error }) => {
+      if (!mountedRef.current) return;
+      if (error) {
+        setUser(null);
+      } else {
+        setUser(session?.user ?? null);
+      }
       setLoading(false);
     });
 
     const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      if (mountedRef.current) {
+        setUser(session?.user ?? null);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mountedRef.current = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const supabase = supabaseRef.current;
