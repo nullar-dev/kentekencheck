@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV !== 'production';
 
-// CSP: Use unsafe-inline in production for Next.js hydration/scripts
-// Strict CSP with nonces requires middleware - added as TODO for future improvement
 const cspScriptSrc = isDev
   ? "'self' 'unsafe-inline' 'unsafe-eval'"
   : "'self' 'unsafe-inline'";
