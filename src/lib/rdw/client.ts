@@ -1,4 +1,4 @@
-import { VehicleSchema, FuelSchema, AxleSchema, APKHistorySchema, type VehicleData, type FuelData, type AxleData, type APKHistoryData } from './schemas';
+import { VehicleSchema, FuelSchema, AxleSchema, type VehicleData, type FuelData, type AxleData, type APKHistoryData } from './schemas';
 
 const RDW_BASE_URL = 'https://opendata.rdw.nl/resource';
 
@@ -77,7 +77,7 @@ export async function getVehicleData(kenteken: string): Promise<{ vehicle: Vehic
   }
 }
 
-export async function getAPKHistory(kenteken: string): Promise<APKHistoryData[]> {
+export async function getAPKHistory(): Promise<APKHistoryData[]> {
   return [];
 }
 

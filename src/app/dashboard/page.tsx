@@ -2,10 +2,9 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { Car, Search, LogOut, Crown, BarChart3, Settings } from 'lucide-react';
-
-export const dynamic = 'force-dynamic';
 
 export default function DashboardPage() {
   const { user, loading, signOut } = useAuth();
@@ -61,11 +60,11 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <a href="/" className="glass-card p-6 rounded-xl hover:bg-white/10 transition-colors group">
+          <Link href="/" className="glass-card p-6 rounded-xl hover:bg-white/10 transition-colors group">
             <Search className="w-8 h-8 text-cyan-400 mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-white font-semibold mb-1">Kenteken Zoeken</h3>
             <p className="text-white/60 text-sm">Zoek voertuiggegevens</p>
-          </a>
+          </Link>
 
           <div className="glass-card p-6 rounded-xl">
             <Crown className="w-8 h-8 text-yellow-400 mb-3" />

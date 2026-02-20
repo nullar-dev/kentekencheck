@@ -71,7 +71,7 @@ export function formatDate(dateStr: string | null): string {
     const d = new Date(cleanDate);
     if (isNaN(d.getTime())) return dateStr;
     return d.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  } catch(e) { return dateStr; }
+  } catch { return dateStr; }
 }
 
 export function getAPKStatus(apkDateStr: string | null | undefined): { type: 'error' | 'warning' | 'success' | null; message: string } {

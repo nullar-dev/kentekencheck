@@ -88,7 +88,7 @@ export async function GET(
 
   try {
     const vehicleData = await getVehicleData(plate);
-    const apkHistory = await getAPKHistory(plate);
+    const apkHistory = await getAPKHistory();
 
     const response = VehicleResponseSchema.parse({
       vehicle: vehicleData.vehicle,

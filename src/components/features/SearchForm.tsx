@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { useToast } from '@/components/Toast';
-import { Search, Loader2, Car, Settings, Gauge, Scale, CreditCard, Info, Calendar, Archive, GaugeCircle, Lock, Shield, ArrowLeft } from 'lucide-react';
+import { Loader2, Car, Settings, Gauge, Scale, CreditCard, Info, Calendar, Archive, GaugeCircle, Lock, Shield, ArrowLeft } from 'lucide-react';
 
 const plateSchema = z.object({
   plate: z.string().min(1, 'Kenteken is verplicht').max(10),
@@ -113,7 +113,7 @@ function formatValue(key: string, value: string | null): string {
 }
 
 function DataCard({ title, icon: Icon, data, delay }: { title: string; icon: React.ElementType; data: Record<string, string | null>; delay: number }) {
-  const entries = Object.entries(data).filter(([_, v]) => v && v !== 'null' && v !== '');
+  const entries = Object.entries(data).filter(([, v]) => v && v !== 'null' && v !== '');
   
   if (entries.length === 0) return null;
   
