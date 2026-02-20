@@ -14,6 +14,23 @@ const plateSchema = z.object({
 
 type PlateFormData = z.infer<typeof plateSchema>;
 
+const DELAY_CLASSES: Record<number, string> = {
+  50: 'delay-100',
+  100: 'delay-100',
+  150: 'delay-200',
+  200: 'delay-200',
+  250: 'delay-300',
+  300: 'delay-300',
+  350: 'delay-400',
+  400: 'delay-400',
+  450: 'delay-500',
+  500: 'delay-500',
+};
+
+function getDelayClass(delay: number): string {
+  return DELAY_CLASSES[delay] || '';
+}
+
 interface VehicleData {
   vehicle: Record<string, string | null>;
   fuel: Record<string, string | null>;
@@ -118,7 +135,7 @@ function DataCard({ title, icon: Icon, data, delay }: { title: string; icon: Rea
   if (entries.length === 0) return null;
   
   return (
-    <div className="glass-card rounded-xl p-3 sm:p-4 card-appear" style={{ animationDelay: `${delay}ms` }}>
+    <div className={`glass-card rounded-xl p-3 sm:p-4 card-appear ${getDelayClass(delay)}`}>
       <div className="flex items-center gap-2 mb-3">
         <Icon className="text-primary text-base sm:text-lg" />
         <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wider truncate">{title}</h3>
@@ -139,7 +156,7 @@ function AxlesCard({ axles, delay }: { axles: Array<Record<string, string | null
   if (!axles || axles.length === 0) return null;
   
   return (
-    <div className="glass-card rounded-xl p-3 sm:p-4 card-appear" style={{ animationDelay: `${delay}ms` }}>
+    <div className={`glass-card rounded-xl p-3 sm:p-4 card-appear ${getDelayClass(delay)}`}>
       <div className="flex items-center gap-2 mb-3">
         <Archive className="text-primary text-base sm:text-lg" />
         <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">Assen ({axles.length})</h3>
