@@ -1,0 +1,74 @@
+# ===========================================
+# Vercel Best Practice 2026
+# Excludes files NOT needed for production deployment
+# ===========================================
+
+# --------------------
+# Dependencies
+# --------------------
+node_modules/
+.pnpm/
+.bun/
+
+# --------------------
+# Testing & Coverage
+# --------------------
+coverage/
+.nyc_output/
+.vitest/
+playwright-report/
+test-results/
+htmlcov/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+__tests__/
+tests/
+
+# --------------------
+# Development Tools
+# --------------------
+.vercel/
+.env*
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --------------------
+# Documentation
+# --------------------
+*.md
+!README.md
+docs/
+
+# --------------------
+# CI/CD (Vercel handles deployment)
+# --------------------
+.github/
+
+# --------------------
+# IDE & OS
+# --------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --------------------
+# Build Artifacts
+# --------------------
+turbo.json
+.eslintcache
+
+# --------------------
+# Source Control
+# --------------------
+.git/
+.gitignore
+.gitattributes
