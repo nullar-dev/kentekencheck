@@ -77,8 +77,30 @@ export async function getVehicleData(kenteken: string): Promise<{ vehicle: Vehic
   }
 }
 
-export async function getAPKHistory(): Promise<APKHistoryData[]> {
-  return [];
+export async function getAPKHistory(kenteken: string): Promise<APKHistoryData[]> {
+  // TODO: Implement RDW APK history endpoint
+  // RDW Open Data API should have an endpoint for APK history
+  // Example: ${RDW_BASE_URL}/{endpoint}.json?kenteken=${encodeURIComponent(kenteken)}
+  // The endpoint needs to be verified with RDW API documentation
+  // 
+  // For now, return empty array until API endpoint is confirmed
+  // When implemented, follow the same pattern as getVehicleData:
+  // 1. Fetch from RDW API
+  // 2. Parse with APKHistorySchema
+  // 3. Return APKHistoryData[]
+  
+  const normalizedPlate = kenteken.replace(/-/g, '').toUpperCase();
+  
+  try {
+    // Placeholder for actual RDW APK history endpoint
+    // Current known RDW endpoints don't include APK history directly
+    // This would require RDW API extension or alternative data source
+    console.log(`[APK History] Requested for plate: ${normalizedPlate} - not yet implemented`);
+    return [];
+  } catch (error) {
+    console.error('Error fetching APK history:', error);
+    return [];
+  }
 }
 
 export function clearCache() {

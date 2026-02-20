@@ -80,7 +80,7 @@ export async function GET(
     const parts = forwardedFor.split(',');
     ip = parts[0]?.trim() ?? 'unknown';
   } else if (realIp) {
-    ip = realIp;
+    ip = realIp.trim() || 'unknown';
   }
   const rateLimitOk = checkRateLimit(ip);
 
@@ -93,7 +93,7 @@ export async function GET(
 
   try {
     const vehicleData = await getVehicleData(plate);
-    const apkHistory = await getAPKHistory();
+    const apkHistory = await getAPKHistory(plate);
 
     const response = VehicleResponseSchema.parse({
       vehicle: vehicleData.vehicle,

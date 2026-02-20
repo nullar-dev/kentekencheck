@@ -16,7 +16,7 @@ export default function Error({
   return (
     <div className="min-h-screen flex items-center justify-center p-4" role="alert">
       <div className="w-full max-w-md text-center">
-        <div className="glass-card p-8 rounded-2xl" role="dialog" aria-labelledby="error-title" aria-describedby="error-description">
+        <div className="glass-card p-8 rounded-2xl" aria-labelledby="error-title" aria-describedby="error-description">
           <h2 id="error-title" className="text-2xl font-bold text-white mb-4">Er is iets misgegaan</h2>
           <p id="error-description" className="text-white/60 mb-6">
             Er is een onverwachte fout opgetreden. Probeer het opnieuw.
