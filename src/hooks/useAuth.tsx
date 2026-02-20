@@ -21,6 +21,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const mountedRef = useRef(true);
 
   useEffect(() => {
+    mountedRef.current = true;
+
     if (initialized.current) return;
     initialized.current = true;
 
@@ -33,6 +35,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }, 0);
       return () => {
         clearTimeout(timer);
+        initialized.current = false;
+        mountedRef.current = false;
       };
     }
 
@@ -56,16 +60,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => {
+      initialized.current = false;
       mountedRef.current = false;
       subscription.unsubscribe();
     };
   }, []);
 
-  const supabase = supabaseRef.current;
-
   const authRateLimit = useRef<{ lastAttempt: number; attempts: number }>({ lastAttempt: 0, attempts: 0 });
   
+  const getSupabase = () => supabaseRef.current;
+
   const signIn = async (email: string, password: string) => {
+    const supabase = getSupabase();
     if (!supabase) return { error: new Error('Supabase not configured') };
     
     const now = Date.now();
@@ -83,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string) => {
+    const supabase = getSupabase();
     if (!supabase) return { error: new Error('Supabase not configured') };
     
     const now = Date.now();
@@ -100,6 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
+    const supabase = getSupabase();
     if (!supabase) return;
     await supabase.auth.signOut();
   };
