@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { normalizePlate, isValidPlateFormat, formatEuro, formatRDWDate } from '@/lib/utils/format';
+import { VehicleSchema } from '@/lib/rdw/schemas';
 
 describe('RDW Schema', () => {
   it('should validate vehicle schema', () => {
@@ -7,12 +9,16 @@ describe('RDW Schema', () => {
       merk: 'ALFA ROMEO',
       handelsbenaming: 'ALFA ROMEO 147',
     };
-    expect(vehicle.kenteken).toBe('07XRVN');
-    expect(vehicle.merk).toBe('ALFA ROMEO');
+    
+    const result = VehicleSchema.safeParse(vehicle);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.kenteken).toBe('07XRVN');
+      expect(result.data.merk).toBe('ALFA ROMEO');
+    }
   });
 
   it('should normalize plate - remove dashes', () => {
-    const normalizePlate = (plate: string) => plate.replace(/-/g, '').toUpperCase();
     expect(normalizePlate('07-XR-VN')).toBe('07XRVN');
     expect(normalizePlate('AB-123-CD')).toBe('AB123CD');
   });
@@ -20,32 +26,18 @@ describe('RDW Schema', () => {
 
 describe('Date Formatting', () => {
   it('should format RDW date (YYYYMMDD)', () => {
-    const formatDate = (dateStr: string) => {
-      if (dateStr.length === 8) {
-        return `${dateStr.slice(0,2)}-${dateStr.slice(2,4)}-${dateStr.slice(4,8)}`;
-      }
-      return dateStr;
-    };
-    expect(formatDate('20070831')).toBe('20-07-0831');
+    expect(formatRDWDate('20070831')).toBe('2007-08-31');
   });
 
   it('should format euro value', () => {
-    const formatEuro = (value: string) => {
-      const num = parseFloat(value);
-      if (!isNaN(num)) {
-        return `€ ${num.toLocaleString('nl-NL')}`;
-      }
-      return value;
-    };
     expect(formatEuro('22688')).toBe('€ 22.688');
   });
 });
 
 describe('Plate Validation', () => {
   it('should validate Dutch plate format', () => {
-    const isValidPlate = (plate: string) => /^[A-Z0-9-]+$/i.test(plate);
-    expect(isValidPlate('07-XR-VN')).toBe(true);
-    expect(isValidPlate('AB123CD')).toBe(true);
-    expect(isValidPlate('ABC 123')).toBe(false);
+    expect(isValidPlateFormat('07-XR-VN')).toBe(true);
+    expect(isValidPlateFormat('AB123CD')).toBe(true);
+    expect(isValidPlateFormat('ABC 123')).toBe(false);
   });
 });
