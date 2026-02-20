@@ -237,8 +237,8 @@ describe('Validation', () => {
     it('should provide error for empty input', () => {
       const result = PlateParamsSchema.safeParse({ plate: '' });
       expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe('Kenteken is verplicht');
+      if (!result.success && result.error.issues.length > 0) {
+        expect(result.error.issues[0]?.message).toBe('Kenteken is verplicht');
       }
     });
   });

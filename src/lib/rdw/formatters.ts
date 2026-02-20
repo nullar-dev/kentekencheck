@@ -66,7 +66,8 @@ export function formatDate(dateStr: string | null): string {
   if (!dateStr) return '-';
   try {
     let cleanDate = dateStr;
-    if (dateStr.indexOf('T') > -1) cleanDate = dateStr.split('T')[0];
+    const splitIndex = dateStr.indexOf('T');
+    if (splitIndex > -1) cleanDate = dateStr.substring(0, splitIndex);
     else if (/^\d{8}$/.test(dateStr)) cleanDate = dateStr.substring(0,4) + '-' + dateStr.substring(4,6) + '-' + dateStr.substring(6,8);
     const d = new Date(cleanDate);
     if (isNaN(d.getTime())) return dateStr;
@@ -77,7 +78,8 @@ export function formatDate(dateStr: string | null): string {
 export function getAPKStatus(apkDateStr: string | null | undefined): { type: 'error' | 'warning' | 'success' | null; message: string } {
   if (!apkDateStr) return { type: null, message: '' };
   
-  const apkDate = new Date(apkDateStr.split('T')[0]);
+  const apkDateStrClean = apkDateStr.split('T')[0] ?? apkDateStr;
+  const apkDate = new Date(apkDateStrClean);
   const now = new Date();
   const daysUntilExpiry = (apkDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
   

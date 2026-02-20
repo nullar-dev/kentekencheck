@@ -88,7 +88,8 @@ function formatDate(dateStr: string | null): string {
   if (!dateStr) return '-';
   try {
     let cleanDate = dateStr;
-    if (dateStr.indexOf('T') > -1) cleanDate = dateStr.split('T')[0];
+    const splitIndex = dateStr.indexOf('T');
+    if (splitIndex > -1) cleanDate = dateStr.substring(0, splitIndex);
     else if (/^\d{8}$/.test(dateStr)) cleanDate = dateStr.substring(0,4) + '-' + dateStr.substring(4,6) + '-' + dateStr.substring(6,8);
     const d = new Date(cleanDate);
     if (isNaN(d.getTime())) return dateStr;
@@ -178,7 +179,8 @@ function AxlesCard({ axles, delay }: { axles: Array<Record<string, string | null
 function APKAlert({ vehicle }: { vehicle: Record<string, string | null> }) {
   if (!vehicle.vervalsdatum_apk) return null;
   
-  const apkDate = new Date(vehicle.vervalsdatum_apk.split('T')[0]);
+  const apkDateStr = vehicle.vervalsdatum_apk.split('T')[0] ?? vehicle.vervalsdatum_apk;
+  const apkDate = new Date(apkDateStr);
   const now = new Date();
   const daysUntilExpiry = (apkDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
   

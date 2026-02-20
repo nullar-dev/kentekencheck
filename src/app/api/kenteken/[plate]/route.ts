@@ -74,9 +74,14 @@ export async function GET(
 
   // Rate limiting - extract client IP properly to prevent spoofing
   const forwardedFor = request.headers.get('x-forwarded-for');
-  const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : 
-             request.headers.get('x-real-ip') || 
-             'unknown';
+  const realIp = request.headers.get('x-real-ip');
+  let ip = 'unknown';
+  if (forwardedFor) {
+    const parts = forwardedFor.split(',');
+    ip = parts[0]?.trim() ?? 'unknown';
+  } else if (realIp) {
+    ip = realIp;
+  }
   const rateLimitOk = checkRateLimit(ip);
 
   if (!rateLimitOk) {
