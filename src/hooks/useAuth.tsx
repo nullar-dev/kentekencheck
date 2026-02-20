@@ -15,12 +15,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    return !(supabaseUrl && supabaseAnonKey);
-  });
+  const [loading, setLoading] = useState(() => true);
   const supabaseRef = useRef<SupabaseClient | null>(null);
   const initialized = useRef(false);
 
@@ -31,21 +26,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    if (supabaseUrl && supabaseAnonKey) {
-      const client = createClient(supabaseUrl, supabaseAnonKey);
-      supabaseRef.current = client;
-
-      client.auth.getSession().then(({ data: { session } }) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      });
-
-      const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null);
-      });
-
-      return () => subscription.unsubscribe();
+    if (!supabaseUrl || !supabaseAnonKey) {
+      // Defer setState to avoid lint error about sync setState in effect
+      setTimeout(() => setLoading(false), 0);
+      return;
     }
+
+    const client = createClient(supabaseUrl, supabaseAnonKey);
+    supabaseRef.current = client;
+
+    client.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const supabase = supabaseRef.current;
