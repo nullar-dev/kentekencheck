@@ -2,15 +2,15 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === 'development';
 
-// Production CSP: strict 'self' only (no unsafe-inline/eval)
-// Next.js doesn't auto-inject nonces via next.config.ts headers
+// CSP: Use unsafe-inline in production for Next.js hydration/scripts
+// Strict CSP with nonces requires middleware - added as TODO for future improvement
 const cspScriptSrc = isDev
   ? "'self' 'unsafe-inline' 'unsafe-eval'"
-  : "'self'";
+  : "'self' 'unsafe-inline'";
 
 const cspStyleSrc = isDev
   ? "'self' 'unsafe-inline'"
-  : "'self'";
+  : "'self' 'unsafe-inline'";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
