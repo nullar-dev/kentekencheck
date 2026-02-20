@@ -95,6 +95,8 @@ logs/
 # --------------------
 # CI/CD (GitHub Actions - keep .github!)
 # --------------------
+# Track workflow files
+!.github/workflows/
 .github/
 
 # --------------------

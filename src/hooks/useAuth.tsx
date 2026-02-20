@@ -51,6 +51,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(session?.user ?? null);
       }
       setLoading(false);
+    }).catch(() => {
+      if (!mountedRef.current) return;
+      setUser(null);
+      setLoading(false);
     });
 
     const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
